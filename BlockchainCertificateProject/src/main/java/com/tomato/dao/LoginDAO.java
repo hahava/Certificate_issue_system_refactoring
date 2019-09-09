@@ -10,7 +10,7 @@ import com.tomato.util.LoginUser;
 @Repository
 public class LoginDAO {
 
-	public boolean loginCheck(UserDTO userDTO) {
+	public boolean hasCertification(UserDTO userDTO) {
 		boolean loginOk = false;
 		Map<String, String> member = LoginUser.getInstance();
 		//id와 passwd를 확인한다. 

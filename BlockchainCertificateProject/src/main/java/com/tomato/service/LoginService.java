@@ -8,13 +8,11 @@ import com.tomato.dto.UserDTO;
 
 @Service
 public class LoginService {
-	
-	@Autowired
-	LoginDAO loginDAO;
 
-	public boolean loginCheck(UserDTO userDTO) {
-		return loginDAO.loginCheck(userDTO);
+	@Autowired
+	private LoginDAO loginDAO;
+
+	public boolean hasCertification(UserDTO userDTO) {
+		return loginDAO.hasCertification(userDTO);
 	}
-	
-	
 }
