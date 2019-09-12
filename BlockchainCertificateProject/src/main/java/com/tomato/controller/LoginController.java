@@ -10,6 +10,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 
+/**
+ * 로그인 관련 페이지를 제어하는 클래스
+ *
+ * @author hahava
+ */
 @Controller
 public class LoginController {
 

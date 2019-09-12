@@ -11,9 +11,9 @@ import java.util.List;
  *
  * @author hahava
  */
-public final class LoginUser {
+public final class LoginUserData {
 
-	private LoginUser() {
+	private LoginUserData() {
 	}
 
 	// 싱글톤 패턴을 사용하여 객체를 관리한다.
