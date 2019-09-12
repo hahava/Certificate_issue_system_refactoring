@@ -1,7 +1,7 @@
 package com.tomato.dao;
 
 import com.tomato.dto.UserDTO;
-import com.tomato.util.LoginUserData;
+import com.tomato.common.LoginUserData;
 import org.springframework.stereotype.Repository;
 
 @Repository

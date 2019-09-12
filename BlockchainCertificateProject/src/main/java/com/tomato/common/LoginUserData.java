@@ -1,4 +1,4 @@
-package com.tomato.util;
+package com.tomato.common;
 
 import com.tomato.dto.UserDTO;
 
