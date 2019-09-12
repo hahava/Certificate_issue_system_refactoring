@@ -8,7 +8,7 @@
 *.log
 
 # BlueJ files
-*.ctxt
+*.ctxt  
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
@@ -223,7 +223,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-
+*.iml
 **/.iml
 **/.idea
 # End of https://www.gitignore.io/api/vim,git,java,macos,maven,windows,eclipse,intellij
