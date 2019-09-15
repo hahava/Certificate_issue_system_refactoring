@@ -5,7 +5,7 @@ import com.tomato.dto.EnrollmentDTO;
 import com.tomato.service.CertificationService;
 import com.tomato.util.BlockChainNetwork;
 import com.tomato.util.StringUtil;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,11 +13,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 
-@RequiredArgsConstructor
 @Controller
 public class CertificationController {
 
+	@Autowired
 	private CertificationService certificationService;
 
 	// json 방식으로 보낸 요청이 서버에 있는 데이터와 맞는지 검증한다.
@@ -135,7 +136,7 @@ public class CertificationController {
 		return mv;
 	}
 
-	// 체크박스에 체크가 되어 있는 항목을 json파일에서 파싱한다.(재학, 졸업 증명)
+	// 체크박스에 체크가 되어 있는 항목을 json 파일에서 파싱한다.(재학, 졸업 증명)
 	@RequestMapping(value = "/boxcheck.do")
 	public ModelAndView boxCheck(HttpServletRequest request, ModelAndView mv) {
 
@@ -143,47 +144,34 @@ public class CertificationController {
 		EnrollmentDTO enrollmentDTO = null;
 		String[] value = request.getParameterValues("checkbox");
 		DiplomaDTO diplomaDTO = null;
+
 		// 체크 박스에 체크가 하나 이상 되지 않을 경우 리턴한다. (자바스크립트가 적용안될 경우 대비)
 		if (value == null) {
 			mv.setViewName("check");
 			return mv;
 		}
 
-		for (int i = 0; i < value.length; i++) {
-			switch (value[i]) {
-				case "certification":
-					enrollmentDTO = new EnrollmentDTO();
-					enrollmentDTO = certificationService.getEnlloment(request, userId);
-					mv.addObject("enrollment", enrollmentDTO);
-					break;
-
-				case "diploma":
-					diplomaDTO = new DiplomaDTO();
-					diplomaDTO = certificationService.getDiploma(request, userId);
-					mv.addObject("diploma", diplomaDTO);
-					break;
-
-				default:
-					break;
-			}
-
-			String time = StringUtil.getDateTime();
-			// 블록체인에 timestamp를 붙여서 등록한다.
-			String blockValue = time;
-			if (enrollmentDTO != null) {
-				blockValue += enrollmentDTO.toString();
-			}
-			if (diplomaDTO != null) {
-				blockValue += diplomaDTO.toString();
-			}
-			BlockChainNetwork.addHashMap(time, blockValue);
-			System.out.println("최초");
-			System.out.println(time + "\t" + blockValue);
-			mv.addObject("timestamp", time);
-			request.getSession().setAttribute("time", time);
+		String time = StringUtil.getDateTime();
+		String blockValue = null;
+		if (Arrays.stream(value).anyMatch("certification"::equals)) {
+			enrollmentDTO = certificationService.getEnlloment(request, userId);
+			blockValue += enrollmentDTO.toString();
+			mv.addObject("enrollment", enrollmentDTO);
 		}
-		// 결과 값을 result.jsp로 리턴한다.
+
+		if (Arrays.stream(value).anyMatch("diploma"::equals)) {
+			diplomaDTO = certificationService.getDiploma(request, userId);
+			blockValue += diplomaDTO.toString();
+			mv.addObject("diploma", diplomaDTO);
+		}
+
+		BlockChainNetwork.addHashMap(time, blockValue);
+
+		request.getSession().setAttribute("time", time);
+		
+		mv.addObject("timestamp", time);
 		mv.setViewName("result");
+
 		return mv;
 	}
 }
