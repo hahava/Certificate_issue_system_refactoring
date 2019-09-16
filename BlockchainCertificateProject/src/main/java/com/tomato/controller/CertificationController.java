@@ -5,6 +5,7 @@ import com.tomato.dto.EnrollmentDTO;
 import com.tomato.service.CertificationService;
 import com.tomato.util.BlockChainNetwork;
 import com.tomato.util.StringUtil;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +16,13 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 
+/**
+ * 인증과 관련된 기능을 처리
+ *
+ * @author hahava
+ */
 @Controller
+@Log
 public class CertificationController {
 
 	@Autowired
@@ -33,6 +40,7 @@ public class CertificationController {
 		if (enrollmentDTO != null) {
 			blockValue += enrollmentDTO.toString();
 		}
+
 		if (diplomaDTO != null) {
 			blockValue += diplomaDTO.toString();
 		}
@@ -141,9 +149,9 @@ public class CertificationController {
 	public ModelAndView boxCheck(HttpServletRequest request, ModelAndView mv) {
 
 		String userId = request.getSession().getAttribute("loginOk").toString();
-		EnrollmentDTO enrollmentDTO = null;
 		String[] value = request.getParameterValues("checkbox");
-		DiplomaDTO diplomaDTO = null;
+		String time = StringUtil.getDateTime();
+		String blockValue = null;
 
 		// 체크 박스에 체크가 하나 이상 되지 않을 경우 리턴한다. (자바스크립트가 적용안될 경우 대비)
 		if (value == null) {
@@ -151,16 +159,14 @@ public class CertificationController {
 			return mv;
 		}
 
-		String time = StringUtil.getDateTime();
-		String blockValue = null;
 		if (Arrays.stream(value).anyMatch("certification"::equals)) {
-			enrollmentDTO = certificationService.getEnlloment(request, userId);
+			EnrollmentDTO enrollmentDTO = certificationService.getEnlloment(userId);
 			blockValue += enrollmentDTO.toString();
 			mv.addObject("enrollment", enrollmentDTO);
 		}
 
 		if (Arrays.stream(value).anyMatch("diploma"::equals)) {
-			diplomaDTO = certificationService.getDiploma(request, userId);
+			DiplomaDTO diplomaDTO = certificationService.getDiploma(userId);
 			blockValue += diplomaDTO.toString();
 			mv.addObject("diploma", diplomaDTO);
 		}
@@ -168,7 +174,7 @@ public class CertificationController {
 		BlockChainNetwork.addHashMap(time, blockValue);
 
 		request.getSession().setAttribute("time", time);
-		
+
 		mv.addObject("timestamp", time);
 		mv.setViewName("result");
 

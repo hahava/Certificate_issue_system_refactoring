@@ -1,8 +1,6 @@
 package com.tomato.service;
 
-import com.tomato.dto.DiplomaDTO;
 import com.tomato.dto.EmailDTO;
-import com.tomato.dto.EnrollmentDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -11,7 +9,14 @@ import org.springframework.stereotype.Component;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.nio.charset.StandardCharsets;
 
+/**
+ * 인증 정보를 요청자의 메일로 전송하는 기능
+ *
+ * TODO : 요청정보(졸업, 재학)별 인증 API를 작성해야함
+ * @author kalin
+ */
 @Component
 public class EmailSender {
 
@@ -43,7 +48,7 @@ public class EmailSender {
 	public void SendEmail(EmailDTO email) {
 		try {
 			MimeMessage msg = mailSender.createMimeMessage();
-			msg.setSubject(email.getSubject());
+			msg.setSubject(email.getSubject(), StandardCharsets.UTF_8.toString());
 			msg.setText(TEMPLATE, "UTF-8", "html");
 			msg.setRecipients(MimeMessage.RecipientType.TO, InternetAddress.parse(email.getReciver()));
 			msg.setFrom("hahava@naver.com");
