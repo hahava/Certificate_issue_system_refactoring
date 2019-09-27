@@ -45,6 +45,8 @@ public class EmailSender {
 		"    </article>\n" +
 		"</section>";
 
+
+	
 	public void SendEmail(EmailDTO email) {
 		try {
 			MimeMessage msg = mailSender.createMimeMessage();
