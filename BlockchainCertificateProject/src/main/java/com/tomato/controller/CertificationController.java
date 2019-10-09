@@ -1,5 +1,6 @@
 package com.tomato.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tomato.dto.DiplomaDTO;
 import com.tomato.dto.EnrollmentDTO;
 import com.tomato.service.CertificationService;
@@ -11,9 +12,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -27,6 +30,9 @@ public class CertificationController {
 
 	@Autowired
 	private CertificationService certificationService;
+
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	// json 방식으로 보낸 요청이 서버에 있는 데이터와 맞는지 검증한다.
 	@RequestMapping(value = "/resultCheck.do", method = RequestMethod.GET)
@@ -54,92 +60,21 @@ public class CertificationController {
 		return mv;
 	}
 
-	// json 데이터를 get방식으로 받아와서 뷰를 만들어준다.
-	@RequestMapping(value = "certification.do/diploma/{diploma_data}/enrollment/{enrollment_data}/time/{time_data}", method = RequestMethod.GET)
-	public ModelAndView certification(@PathVariable String diploma_data, @PathVariable String enrollment_data,
-		@PathVariable String time_data, ModelAndView mv) {
-
-		if (!diploma_data.equals("null")) {
-			DiplomaDTO diplomaDTO = new DiplomaDTO();
-			String temp = diploma_data.substring(1, diploma_data.length() - 1);
-			String tempArr[] = temp.split(",");
-			for (int i = 0; i < tempArr.length; i++) {
-				String mapArr[] = tempArr[i].split(":");
-				switch (mapArr[0]) {
-					case "no":
-						diplomaDTO.setNo(mapArr[1]);
-						break;
-					case "type":
-						diplomaDTO.setType(mapArr[1]);
-						break;
-					case "name":
-						diplomaDTO.setName(mapArr[1]);
-						break;
-					case "dateOfBirth":
-						diplomaDTO.setDateOfBirth(mapArr[1]);
-						break;
-					case "college":
-						diplomaDTO.setCollege(mapArr[1]);
-						break;
-					case "major":
-						diplomaDTO.setMajor(mapArr[1]);
-						break;
-					case "dateOfMatriculation":
-						diplomaDTO.setDateOfMatriculation(mapArr[1]);
-						break;
-					case "dateOfGraduation":
-						diplomaDTO.setDateOfGraduation(mapArr[1]);
-						break;
-					case "nameOfDegree":
-						diplomaDTO.setNameOfDegree(mapArr[1]);
-						break;
-					case "degreeRegistrationNo":
-						diplomaDTO.setDegreeRegistrationNo(mapArr[1]);
-						break;
-					default:
-						break;
-				}
+	@RequestMapping(value = "/certification.do/{type}/{result}/{timeData}", method = RequestMethod.GET)
+	public ModelAndView diplomaCertification(@PathVariable String type, @PathVariable String result,
+		@PathVariable String timeData, ModelAndView mv) {
+		try {
+			if (type.equals("diploma")) {
+				DiplomaDTO diplomaDTO = objectMapper.readValue(result, DiplomaDTO.class);
+				mv.addObject("diploma", diplomaDTO);
+			} else if (type.equals("enrollment")) {
+				EnrollmentDTO enrollmentDTO = objectMapper.readValue(result, EnrollmentDTO.class);
+				mv.addObject("enrollment", enrollmentDTO);
 			}
-			System.out.println(diplomaDTO.toString());
-			mv.addObject("diploma", diplomaDTO);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-
-		if (!enrollment_data.equals("null")) {
-			EnrollmentDTO enrollmentDTO = new EnrollmentDTO();
-			String temp = enrollment_data.substring(1, enrollment_data.length() - 1);
-			String tempArr[] = temp.split(",");
-			for (int i = 0; i < tempArr.length; i++) {
-				String mapArr[] = tempArr[i].split(":");
-				switch (mapArr[0]) {
-					case "no":
-						enrollmentDTO.setNo(mapArr[1]);
-						break;
-					case "type":
-						enrollmentDTO.setType(mapArr[1]);
-						break;
-					case "name":
-						enrollmentDTO.setName(mapArr[1]);
-						break;
-					case "dateOfBirth":
-						enrollmentDTO.setDateOfBirth(mapArr[1]);
-						break;
-					case "college":
-						enrollmentDTO.setCollege(mapArr[1]);
-						break;
-					case "major":
-						enrollmentDTO.setMajor(mapArr[1]);
-						break;
-					case "grade":
-						enrollmentDTO.setGrade(mapArr[1]);
-						break;
-					default:
-						break;
-				}
-			}
-			System.out.println(enrollmentDTO.toString());
-			mv.addObject("enrollment", enrollmentDTO);
-		}
-		mv.addObject("time", time_data);
+		mv.addObject("time", timeData);
 		mv.setViewName("checker");
 		return mv;
 	}

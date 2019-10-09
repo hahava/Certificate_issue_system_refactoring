@@ -1,24 +1,23 @@
 {
-	"certificate1":{
-		"no": "39127",
-		"type": "재학 증명서",
-		"name": "이하린",
-		"dateOfBirth": "1992년 06월 22일",
-		"college": "소프트웨어융합대학",
-		"major": "컴퓨터공학과",
-		"grade": "4학년 재학"
-	},
-
-	"certificate2":{
-		"no": "70534",
-		"type": "졸업 증명서",
-		"name": "이하린",
-		"dateOfBirth": "1992년 06월 22일",
-		"college": "소프트웨어융합대학",
-		"major": "컴퓨터공학과",
-		"dateOfMatriculation": "2012년 03월 02일",
-		"dateOfGraduation": "2018년 02월 18일",
-		"nameOfDegree": "공학사",
-		"degreeRegistrationNo": "세종대2018(학) 4947"
-	}
+  "certificate1": {
+    "no": "39127",
+    "type": "enrollment",
+    "name": "halinlee",
+    "dateOfBirth": "1992-06-22",
+    "college": "software",
+    "major": "computer-science",
+    "grade": "4"
+  },
+  "certificate2": {
+    "no": "70534",
+    "type": "diploma",
+    "name": "halinlee",
+    "dateOfBirth": "1992-06-22",
+    "college": "software",
+    "major": "computer-science",
+    "dateOfMatriculation": "2012-03-02",
+    "dateOfGraduation": "2018-02-18",
+    "nameOfDegree": "Engineering",
+    "degreeRegistrationNo": "sejong2018(school)4947"
+  }
 }
