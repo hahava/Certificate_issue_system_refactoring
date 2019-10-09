@@ -5,10 +5,12 @@ import lombok.Setter;
 import lombok.ToString;
 import org.json.simple.JSONObject;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @ToString
-public class EnrollmentDTO {
+public class EnrollmentDTO implements Serializable {
 	private String no;
 	private String type;
 	private String name;

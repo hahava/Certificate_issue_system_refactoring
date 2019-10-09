@@ -22,7 +22,6 @@ public final class LoginUserData {
 	static {
 		MEMBERS = new LinkedList<>();
 		MEMBERS.add(new UserDTO("halin", "1234"));
-		MEMBERS.add(new UserDTO("junghoon", "1234"));
 	}
 
 	public static List<UserDTO> getInstance() {

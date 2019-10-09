@@ -4,13 +4,15 @@ import lombok.Getter;
 import lombok.Setter;
 import org.json.simple.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * @author hahava
  *
  */
 @Getter
 @Setter
-public class DiplomaDTO {
+public class DiplomaDTO implements Serializable {
 	private String no;
 	private String type;
 	private String name;
